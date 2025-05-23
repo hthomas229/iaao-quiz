@@ -49,7 +49,7 @@ export default function Quiz() {
             <label className="inline-flex items-center">
               <input
                 type="radio"
-                name={currentQuestion.id}
+                name={String(currentQuestion.id)}
                 value={opt}
                 checked={answers[currentQuestion.id] === opt}
                 onChange={() => setAnswer(currentQuestion.id, opt)}
