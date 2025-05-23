@@ -1,21 +1,25 @@
-// // File: app/api/save/route.ts
-// import { NextResponse } from 'next/server';
-// import fs from 'fs';
-// import path from 'path';
+import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-// export async function POST(req: Request) {
-//   const body = await req.json();
-//   const filePath = path.join(process.cwd(), 'app', 'data', 'results.json');
+type Result = {
+  name: string;
+  score: number;
+  completedAt: string;
+};
 
-//   let results: any[] = [];
-//   if (fs.existsSync(filePath)) {
-//     const fileData = fs.readFileSync(filePath, 'utf8');
-//     results = JSON.parse(fileData);
-//   }
+export async function POST(req: Request) {
+  const body: Result = await req.json();
+  const filePath = path.join(process.cwd(), 'app', 'data', 'results.json');
 
-//   results.push(body);
-//   fs.writeFileSync(filePath, JSON.stringify(results, null, 2));
+  let results: Result[] = [];
+  if (fs.existsSync(filePath)) {
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    results = JSON.parse(fileData) as Result[];
+  }
 
-//   return NextResponse.json({ message: 'Saved' });
-// }
+  results.push(body);
+  fs.writeFileSync(filePath, JSON.stringify(results, null, 2));
 
+  return NextResponse.json({ message: 'Saved' });
+}
